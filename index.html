@@ -3,34 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>🃏 텍사스 홀덤 토너먼트</title>
+<title>DIGITAL POKER ARENA</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+KR:wght@400;700&display=swap');
 :root {
-  --bg: #0d1117;
-  --bg2: #161b22;
-  --bg3: #21262d;
-  --felt: #1a5c2a;
-  --felt2: #1e6b31;
-  --gold: #ffd700;
-  --red: #ff4757;
-  --green: #2ed573;
-  --blue: #5352ed;
-  --cyan: #00d2d3;
-  --text: #e6edf3;
-  --dim: #8b949e;
+  --bg: #05080f;
+  --bg2: #0c1222;
+  --bg3: #131d33;
+  --felt: #0a1628;
+  --gold: #f0c040;
+  --red: #ff3355;
+  --green: #00ff88;
+  --blue: #4466ff;
+  --cyan: #00eeff;
+  --purple: #aa44ff;
+  --text: #d0e0f0;
+  --dim: #4a6080;
+  --glow-cyan: 0 0 8px #00eeff, 0 0 20px rgba(0,238,255,0.15);
+  --glow-gold: 0 0 8px #f0c040, 0 0 20px rgba(240,192,64,0.15);
+  --glow-red: 0 0 8px #ff3355, 0 0 20px rgba(255,51,85,0.15);
   --card-w: 48px;
   --card-h: 68px;
+  --font-digi: 'Orbitron', 'Noto Sans KR', sans-serif;
+  --font-body: 'Noto Sans KR', -apple-system, sans-serif;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-family: var(--font-body);
   background: var(--bg);
   color: var(--text);
   min-height: 100dvh;
   overflow-x: hidden;
   -webkit-tap-highlight-color: transparent;
+}
+
+/* 스캔라인 오버레이 */
+body::after {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,238,255,0.015) 2px, rgba(0,238,255,0.015) 4px);
 }
 
 /* ── 스크린들 ── */
@@ -40,70 +52,78 @@ body {
 /* ── 인트로 ── */
 #intro {
   justify-content: center; align-items: center; gap: 20px; padding: 20px;
-  background: linear-gradient(135deg, #0d1117 0%, #1a1a3e 50%, #0d1117 100%);
+  background: radial-gradient(ellipse at 50% 30%, #0a1840 0%, #050810 70%);
 }
-#intro h1 { font-size: 2em; text-align: center; }
-#intro .subtitle { color: var(--dim); text-align: center; font-size: 0.9em; }
+#intro h1 {
+  font-family: var(--font-digi); font-size: 1.6em; text-align: center;
+  color: var(--cyan); text-shadow: var(--glow-cyan);
+  letter-spacing: 3px; text-transform: uppercase;
+}
+#intro .subtitle { color: var(--dim); text-align: center; font-size: 0.85em; letter-spacing: 1px; }
 .level-preview {
-  display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 360px;
-  background: var(--bg2); border-radius: 12px; padding: 16px;
+  display: flex; flex-direction: column; gap: 6px; width: 100%; max-width: 360px;
+  background: var(--bg2); border-radius: 4px; padding: 16px;
+  border: 1px solid rgba(0,238,255,0.15); box-shadow: var(--glow-cyan);
 }
 .level-preview .lv {
   display: flex; align-items: center; gap: 10px; font-size: 0.85em; padding: 6px 0;
-  border-bottom: 1px solid var(--bg3);
+  border-bottom: 1px solid rgba(0,238,255,0.08);
 }
 .level-preview .lv:last-child { border: none; }
 .level-preview .lv-icon { font-size: 1.3em; width: 30px; text-align: center; }
-.level-preview .lv-name { flex: 1; }
-.level-preview .lv-blind { color: var(--dim); font-size: 0.8em; }
+.level-preview .lv-name { flex: 1; font-family: var(--font-digi); font-size: 0.7em; letter-spacing: 1px; }
+.level-preview .lv-blind { color: var(--cyan); font-size: 0.7em; font-family: var(--font-digi); }
 
 #nameInput {
-  background: var(--bg3); border: 1px solid #444; color: var(--text);
-  padding: 12px 16px; border-radius: 8px; font-size: 1em; width: 100%; max-width: 300px;
-  text-align: center; outline: none;
+  background: rgba(0,238,255,0.05); border: 1px solid rgba(0,238,255,0.3); color: var(--cyan);
+  padding: 12px 16px; border-radius: 4px; font-size: 1em; width: 100%; max-width: 300px;
+  text-align: center; outline: none; font-family: var(--font-digi); letter-spacing: 2px;
 }
-#nameInput:focus { border-color: var(--gold); }
+#nameInput:focus { border-color: var(--cyan); box-shadow: var(--glow-cyan); }
+#nameInput::placeholder { color: var(--dim); }
 .btn {
-  padding: 14px 32px; border: none; border-radius: 10px; font-size: 1em;
-  font-weight: 700; cursor: pointer; transition: all 0.15s;
-  -webkit-user-select: none; user-select: none;
+  padding: 14px 32px; border: 1px solid transparent; border-radius: 4px; font-size: 0.9em;
+  font-weight: 700; cursor: pointer; font-family: var(--font-digi); letter-spacing: 1px;
+  text-transform: uppercase; -webkit-user-select: none; user-select: none;
 }
-.btn:active { transform: scale(0.96); }
-.btn-gold { background: var(--gold); color: #000; }
-.btn-green { background: var(--green); color: #000; }
-.btn-red { background: var(--red); color: #fff; }
-.btn-blue { background: var(--blue); color: #fff; }
-.btn-dim { background: var(--bg3); color: var(--dim); }
+.btn:active { filter: brightness(1.3); }
+.btn-gold { background: rgba(240,192,64,0.15); color: var(--gold); border-color: var(--gold); box-shadow: var(--glow-gold); }
+.btn-green { background: rgba(0,255,136,0.1); color: var(--green); border-color: var(--green); }
+.btn-red { background: rgba(255,51,85,0.15); color: var(--red); border-color: var(--red); box-shadow: var(--glow-red); }
+.btn-blue { background: rgba(68,102,255,0.15); color: var(--blue); border-color: var(--blue); }
+.btn-dim { background: rgba(255,255,255,0.03); color: var(--dim); border-color: rgba(255,255,255,0.1); }
 
 /* ── 레벨 인트로 ── */
 #levelIntro {
   justify-content: center; align-items: center; gap: 16px; padding: 20px;
-  background: linear-gradient(180deg, #0d1117, #1a2332);
+  background: radial-gradient(ellipse at 50% 40%, #0a1840 0%, #050810 70%);
 }
-#levelIntro h2 { font-size: 1.6em; }
+#levelIntro h2 { font-size: 1.3em; font-family: var(--font-digi); color: var(--cyan); text-shadow: var(--glow-cyan); letter-spacing: 2px; }
 .opponent-list {
   display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 400px;
 }
 .opponent-chip {
-  background: var(--bg3); padding: 6px 14px; border-radius: 20px; font-size: 0.85em;
+  background: rgba(0,238,255,0.05); padding: 6px 14px; border-radius: 4px; font-size: 0.85em;
+  border: 1px solid rgba(0,238,255,0.15);
 }
 
 /* ── 게임 화면 ── */
 #gameScreen {
   flex: 1; display: flex; flex-direction: column;
-  background: linear-gradient(180deg, #0d1117 0%, #0f2218 30%, #0d1117 100%);
+  background: radial-gradient(ellipse at 50% 50%, #081428 0%, #030810 100%);
 }
 
 .top-bar {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 8px 14px; background: rgba(0,0,0,0.5); font-size: 0.8em;
-  flex-shrink: 0;
+  padding: 8px 14px; background: rgba(0,238,255,0.03); font-size: 0.75em;
+  flex-shrink: 0; border-bottom: 1px solid rgba(0,238,255,0.08);
 }
 .top-bar .level-badge {
-  background: var(--bg3); padding: 3px 10px; border-radius: 12px; font-weight: 600;
+  background: rgba(0,238,255,0.08); padding: 3px 10px; border-radius: 4px; font-weight: 700;
+  font-family: var(--font-digi); font-size: 0.85em; color: var(--cyan); letter-spacing: 1px;
 }
-.top-bar .blind-info { color: var(--dim); }
-.top-bar .hand-num { color: var(--dim); }
+.top-bar .blind-info { color: var(--dim); font-family: var(--font-digi); font-size: 0.85em; }
+.top-bar .hand-num { color: var(--dim); font-family: var(--font-digi); font-size: 0.85em; }
 
 /* 상대 영역 */
 .opponents-area {
@@ -112,32 +132,33 @@ body {
 }
 .opp {
   display: flex; flex-direction: column; align-items: center; gap: 2px;
-  background: var(--bg2); border-radius: 10px; padding: 8px 10px 6px; min-width: 76px;
-  position: relative; border: 2px solid transparent;
+  background: rgba(0,238,255,0.03); border-radius: 4px; padding: 8px 10px 6px; min-width: 76px;
+  position: relative; border: 1px solid rgba(0,238,255,0.12);
 }
-.opp.folded { opacity: 0.3; }
-.opp.acting { border-color: var(--cyan); }
+.opp.folded { opacity: 0.25; border-color: rgba(255,255,255,0.03); }
 .opp.eliminated { display: none; }
-.opp .opp-avatar { font-size: 1.6em; line-height: 1; }
-.opp .opp-name { font-size: 0.7em; font-weight: 600; max-width: 76px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.opp .opp-chips { font-size: 0.65em; color: var(--green); }
+.opp .opp-avatar { font-size: 1.6em; line-height: 1; filter: drop-shadow(0 0 4px rgba(0,238,255,0.3)); }
+.opp .opp-name { font-size: 0.65em; font-weight: 700; max-width: 76px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-digi); letter-spacing: 0.5px; color: var(--cyan); }
+.opp .opp-chips { font-size: 0.6em; color: var(--green); font-family: var(--font-digi); }
 .opp .opp-cards { display: flex; gap: 2px; }
-.opp .opp-bet { font-size: 0.6em; color: var(--gold); min-height: 14px; }
+.opp .opp-bet { font-size: 0.6em; color: var(--gold); min-height: 14px; font-family: var(--font-digi); }
 .opp .opp-status {
-  font-size: 0.7em; font-weight: 700; padding: 2px 8px; border-radius: 6px;
+  font-size: 0.65em; font-weight: 700; padding: 2px 8px; border-radius: 2px;
   min-height: 20px; text-align: center; white-space: nowrap;
+  font-family: var(--font-digi); letter-spacing: 1px;
 }
-.opp .opp-status.st-fold { background: #333; color: #777; }
-.opp .opp-status.st-check { background: rgba(255,255,255,0.1); color: var(--text); }
-.opp .opp-status.st-call { background: rgba(46,213,115,0.25); color: var(--green); }
-.opp .opp-status.st-raise { background: rgba(255,215,0,0.25); color: var(--gold); }
-.opp .opp-status.st-allin { background: rgba(255,71,87,0.4); color: #fff; }
-.opp .opp-status.st-none { background: transparent; color: transparent; }
+.opp .opp-status.st-fold { background: rgba(255,255,255,0.03); color: #555; border: 1px solid #333; }
+.opp .opp-status.st-check { background: rgba(0,238,255,0.06); color: var(--cyan); border: 1px solid rgba(0,238,255,0.2); }
+.opp .opp-status.st-call { background: rgba(0,255,136,0.08); color: var(--green); border: 1px solid rgba(0,255,136,0.3); box-shadow: 0 0 6px rgba(0,255,136,0.15); }
+.opp .opp-status.st-raise { background: rgba(240,192,64,0.1); color: var(--gold); border: 1px solid rgba(240,192,64,0.3); box-shadow: var(--glow-gold); }
+.opp .opp-status.st-allin { background: rgba(255,51,85,0.15); color: var(--red); border: 1px solid rgba(255,51,85,0.4); box-shadow: var(--glow-red); }
+.opp .opp-status.st-none { background: transparent; color: transparent; border: 1px solid transparent; }
 
 .dealer-btn {
-  background: var(--gold); color: #000; width: 18px; height: 18px; border-radius: 50%;
+  background: var(--gold); color: #000; width: 18px; height: 18px; border-radius: 2px;
   display: flex; align-items: center; justify-content: center; font-size: 0.55em; font-weight: 900;
-  position: absolute; top: -4px; right: -4px;
+  position: absolute; top: -4px; right: -4px; font-family: var(--font-digi);
+  box-shadow: var(--glow-gold);
 }
 
 /* 액션 로그 스트립 */
@@ -146,12 +167,12 @@ body {
   max-height: 54px; overflow-y: auto; flex-shrink: 0;
 }
 .action-log-item {
-  font-size: 0.75em; padding: 3px 8px; border-radius: 6px;
-  background: rgba(255,255,255,0.05);
+  font-size: 0.7em; padding: 3px 8px; border-radius: 2px;
+  background: rgba(0,238,255,0.02); border-left: 2px solid rgba(0,238,255,0.15);
 }
-.action-log-item .alog-name { font-weight: 700; color: var(--cyan); }
+.action-log-item .alog-name { font-weight: 700; color: var(--cyan); font-family: var(--font-digi); font-size: 0.9em; }
 .action-log-item .alog-act { color: var(--gold); }
-.action-log-item .alog-amt { color: var(--green); }
+.action-log-item .alog-amt { color: var(--green); font-family: var(--font-digi); }
 
 /* 테이블 (커뮤니티) */
 .table-area {
@@ -160,35 +181,38 @@ body {
 }
 .pot-display {
   font-size: 0.85em; color: var(--gold); font-weight: 700;
-  background: rgba(0,0,0,0.4); padding: 4px 16px; border-radius: 20px;
+  background: rgba(240,192,64,0.06); padding: 4px 16px; border-radius: 4px;
+  font-family: var(--font-digi); letter-spacing: 2px;
+  border: 1px solid rgba(240,192,64,0.2); box-shadow: var(--glow-gold);
 }
 .community-cards {
   display: flex; gap: 6px; justify-content: center; min-height: var(--card-h);
   align-items: center;
 }
 .stage-label {
-  font-size: 0.75em; color: var(--dim); font-weight: 600; letter-spacing: 2px;
+  font-size: 0.7em; color: var(--cyan); font-weight: 700; letter-spacing: 4px;
+  font-family: var(--font-digi); text-shadow: var(--glow-cyan);
 }
 
 /* 카드 */
 .card {
-  width: var(--card-w); height: var(--card-h); border-radius: 6px;
+  width: var(--card-w); height: var(--card-h); border-radius: 3px;
   display: flex; align-items: center; justify-content: center;
   font-size: 0.85em; font-weight: 700; position: relative;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  box-shadow: 0 0 8px rgba(0,238,255,0.1);
 }
 .card-front {
-  background: #fff; color: #222; flex-direction: column; gap: 1px;
+  background: linear-gradient(135deg, #f8f9fa, #e8eaed); color: #111; flex-direction: column; gap: 1px;
+  border: 1px solid rgba(0,238,255,0.2);
 }
-.card-front.red { color: #d63031; }
-.card-front .card-rank { font-size: 1em; line-height: 1; }
+.card-front.red { color: #cc0033; }
+.card-front .card-rank { font-size: 1em; line-height: 1; font-family: var(--font-digi); }
 .card-front .card-suit { font-size: 0.9em; line-height: 1; }
 .card-back {
-  background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
-  border: 2px solid #555;
+  background: linear-gradient(135deg, #0a1628, #131d33);
+  border: 1px solid rgba(0,238,255,0.25);
 }
-.card-back::after { content: '🂠'; font-size: 1.5em; }
-/* 애니메이션 제거 - 정적 표시 */
+.card-back::after { content: '◆'; font-size: 1em; color: rgba(0,238,255,0.3); }
 
 /* 미니카드 (상대용) */
 .mini-card {
@@ -196,25 +220,26 @@ body {
   display: flex; align-items: center; justify-content: center; flex-direction: column;
   box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
-.mini-card.card-back { border-width: 1px; }
-.mini-card.card-back::after { font-size: 0.9em; }
-.mini-card.card-front { background: #fff; color: #222; gap: 0; }
-.mini-card.card-front.red { color: #d63031; }
+.mini-card.card-back { border: 1px solid rgba(0,238,255,0.2); background: linear-gradient(135deg, #0a1628, #131d33); }
+.mini-card.card-back::after { font-size: 0.6em; color: rgba(0,238,255,0.3); }
+.mini-card.card-front { background: linear-gradient(135deg, #f8f9fa, #e8eaed); color: #111; gap: 0; border: 1px solid rgba(0,238,255,0.15); }
+.mini-card.card-front.red { color: #cc0033; }
 .mini-card .card-rank { font-size: 0.6em; }
 .mini-card .card-suit { font-size: 0.55em; }
 
 /* 플레이어 영역 */
 .player-area {
   flex-shrink: 0; padding: 8px 14px 6px;
-  background: linear-gradient(180deg, transparent, rgba(0,0,0,0.5));
+  background: linear-gradient(180deg, transparent, rgba(0,20,40,0.8));
+  border-top: 1px solid rgba(0,238,255,0.08);
 }
 .player-info {
   display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;
 }
 .player-name-chips { display: flex; align-items: center; gap: 10px; }
-.player-name { font-weight: 700; font-size: 0.95em; }
-.player-chips { color: var(--green); font-weight: 600; font-size: 0.9em; }
-.player-hand-rank { color: var(--cyan); font-size: 0.8em; font-weight: 600; }
+.player-name { font-weight: 700; font-size: 0.85em; font-family: var(--font-digi); color: var(--cyan); letter-spacing: 1px; }
+.player-chips { color: var(--green); font-weight: 700; font-size: 0.8em; font-family: var(--font-digi); }
+.player-hand-rank { color: var(--gold); font-size: 0.75em; font-weight: 700; font-family: var(--font-digi); letter-spacing: 1px; text-shadow: var(--glow-gold); }
 .player-cards {
   display: flex; gap: 8px; justify-content: center; margin-bottom: 8px;
 }
@@ -237,8 +262,8 @@ body {
 }
 .raise-panel.active { display: flex; }
 .raise-slider-row { display: flex; align-items: center; gap: 10px; }
-.raise-slider-row input[type=range] { flex: 1; accent-color: var(--gold); height: 28px; }
-.raise-amount { color: var(--gold); font-weight: 700; font-size: 1em; min-width: 60px; text-align: center; }
+.raise-slider-row input[type=range] { flex: 1; accent-color: var(--cyan); height: 28px; }
+.raise-amount { color: var(--gold); font-weight: 700; font-size: 1em; min-width: 60px; text-align: center; font-family: var(--font-digi); }
 .raise-presets { display: flex; gap: 6px; flex-wrap: wrap; }
 .raise-presets .btn { padding: 6px 12px; font-size: 0.75em; }
 .raise-confirm-row { display: flex; gap: 8px; }
@@ -268,10 +293,11 @@ body {
 }
 .overlay.active { display: flex; }
 .overlay-box {
-  background: var(--bg2); border-radius: 16px; padding: 24px; max-width: 380px;
+  background: var(--bg2); border-radius: 4px; padding: 24px; max-width: 380px;
   width: 100%; text-align: center;
+  border: 1px solid rgba(0,238,255,0.2); box-shadow: var(--glow-cyan), 0 0 40px rgba(0,0,0,0.8);
 }
-.overlay-box h2 { margin-bottom: 12px; }
+.overlay-box h2 { margin-bottom: 12px; font-family: var(--font-digi); color: var(--cyan); text-shadow: var(--glow-cyan); letter-spacing: 2px; }
 .overlay-box p { color: var(--dim); margin: 6px 0; font-size: 0.9em; }
 .overlay-box .big-emoji { font-size: 3em; margin-bottom: 8px; }
 .overlay-box .btn { margin-top: 16px; width: 100%; }
@@ -294,14 +320,15 @@ body {
 }
 .overlay-box .sd-board {
   display: flex; gap: 5px; justify-content: center; margin: 12px 0;
-  padding: 10px; background: rgba(26,92,42,0.3); border-radius: 10px;
+  padding: 10px; background: rgba(0,238,255,0.03); border-radius: 4px;
+  border: 1px solid rgba(0,238,255,0.1);
 }
 .pot-won {
-  color: var(--gold); font-size: 1.3em; font-weight: 700;
-  margin-top: 8px !important;
+  color: var(--gold); font-size: 1.2em; font-weight: 700;
+  margin-top: 8px !important; font-family: var(--font-digi); text-shadow: var(--glow-gold);
 }
 .sd-result-label {
-  font-size: 0.8em; color: var(--dim); margin-bottom: 8px;
+  font-size: 0.7em; color: var(--dim); margin-bottom: 8px; font-family: var(--font-digi); letter-spacing: 3px;
 }
 
 /* 반응형 */
@@ -324,17 +351,17 @@ body {
 
 <!-- ── 인트로 ── -->
 <div id="intro" class="screen active">
-  <h1>🃏 텍사스 홀덤<br>토너먼트</h1>
-  <p class="subtitle">5단계를 클리어하면 당신이 챔피언!</p>
+  <h1>DIGITAL<br>POKER ARENA</h1>
+  <p class="subtitle">// DIGIVOLUTION TOURNAMENT SYSTEM //</p>
   <div class="level-preview">
-    <div class="lv"><span class="lv-icon">🐟</span><span class="lv-name">Lv.1 동네 초보</span><span class="lv-blind">50/100</span></div>
-    <div class="lv"><span class="lv-icon">🎯</span><span class="lv-name">Lv.2 동호회 중수</span><span class="lv-blind">100/200</span></div>
-    <div class="lv"><span class="lv-icon">🔥</span><span class="lv-name">Lv.3 세미프로</span><span class="lv-blind">200/400</span></div>
-    <div class="lv"><span class="lv-icon">🦈</span><span class="lv-name">Lv.4 프로</span><span class="lv-blind">500/1000</span></div>
-    <div class="lv"><span class="lv-icon">👑</span><span class="lv-name">Lv.5 월드클래스</span><span class="lv-blind">1K/2K</span></div>
+    <div class="lv"><span class="lv-icon">🥚</span><span class="lv-name">Lv.1 유년기</span><span class="lv-blind">50/100</span></div>
+    <div class="lv"><span class="lv-icon">🐲</span><span class="lv-name">Lv.2 성장기</span><span class="lv-blind">100/200</span></div>
+    <div class="lv"><span class="lv-icon">🔥</span><span class="lv-name">Lv.3 성숙기</span><span class="lv-blind">200/400</span></div>
+    <div class="lv"><span class="lv-icon">⚡</span><span class="lv-name">Lv.4 완전체</span><span class="lv-blind">500/1K</span></div>
+    <div class="lv"><span class="lv-icon">👑</span><span class="lv-name">Lv.5 궁극체</span><span class="lv-blind">1K/2K</span></div>
   </div>
   <input type="text" id="nameInput" placeholder="닉네임 입력" maxlength="10" autocomplete="off">
-  <button class="btn btn-gold" onclick="startGame()">🃏 게임 시작</button>
+  <button class="btn btn-gold" onclick="startGame()">DIGIVOLUTION START</button>
 </div>
 
 <!-- ── 레벨 인트로 ── -->
@@ -411,26 +438,26 @@ const RANK_VAL = Object.fromEntries(RANKS.map((r,i)=>[r,i]));
 const RANK_DISPLAY = {T:'10',J:'J',Q:'Q',K:'K',A:'A'};
 
 const LEVELS = [
-  {name:'동네 초보',icon:'🐟',sb:50,bb:100,chips:10000,opponents:5,hands:10,
-   names:['뽀식이','럭키짱','초심자','해피','콜링머신'],
-   avatars:['🐥','🐹','🐰','🐸','🐷'],
-   desc:'초보들은 감으로 플레이합니다. 편하게 즐기세요!'},
-  {name:'동호회 중수',icon:'🎯',sb:100,bb:200,chips:15000,opponents:4,hands:12,
-   names:['타이거','폭스','블레이드','스톰','레이저'],
-   avatars:['🐯','🦊','🐺','🦅','🐍'],
-   desc:'핸드 선별을 시작합니다. 무분별한 콜은 줄여야 해요.'},
-  {name:'세미프로',icon:'🔥',sb:200,bb:400,chips:20000,opponents:4,hands:12,
-   names:['아이스맨','스나이퍼','쉐도우','네뷸라','팬텀'],
-   avatars:['🐻‍❄️','🦁','🐆','🦇','🦉'],
-   desc:'C-벳과 세미블러프를 구사합니다. 팟 오즈를 계산하세요!'},
-  {name:'프로',icon:'🦈',sb:500,bb:1000,chips:30000,opponents:3,hands:14,
-   names:['다니엘N','필아이비','가스한센','패트릭A','톰드완'],
-   avatars:['🦈','🐊','🦂','🐉','🦍'],
-   desc:'밸런스 플레이, 트래핑, 포커페이스. 진짜 승부가 시작됩니다.'},
-  {name:'월드클래스',icon:'👑',sb:1000,bb:2000,chips:50000,opponents:3,hands:15,
-   names:['GTO봇','솔버AI','알파포커','딥스택','넛크래커'],
-   avatars:['🤖','👾','🧠','💀','👽'],
-   desc:'GTO 기반 최적 플레이. 여기서 살아남으면 당신이 챔피언!'},
+  {name:'유년기 BABY',icon:'🥚',sb:50,bb:100,chips:10000,opponents:5,hands:10,
+   names:['코로몬','아구몬','피요몬','텐타몬','팔몬'],
+   avatars:['🐣','🦎','🐦','🐛','🌱'],
+   desc:'디지털 월드에 첫 발을 내딛다. 유년기 디지몬들과 대결!'},
+  {name:'성장기 CHILD',icon:'🐲',sb:100,bb:200,chips:15000,opponents:4,hands:12,
+   names:['그레이몬','가루루몬','버드라몬','캅테리몬','트게몬'],
+   avatars:['🦖','🐺','🦅','⚡','🌵'],
+   desc:'진화의 시작. 상대가 핸드를 선별하기 시작한다!'},
+  {name:'성숙기 ADULT',icon:'🔥',sb:200,bb:400,chips:20000,opponents:4,hands:12,
+   names:['메탈그레이몬','워가루몬','가루다몬','아틀라캅테리몬','릴리몬'],
+   avatars:['🤖','🐺','🦅','⚡','🌸'],
+   desc:'C-벳과 블러프를 구사하는 성숙기. 팟 오즈를 계산하라!'},
+  {name:'완전체 PERFECT',icon:'⚡',sb:500,bb:1000,chips:30000,opponents:3,hands:14,
+   names:['워그레이몬','메탈가루루몬','호우오우몬','헤라클레캅테리몬','로제몬'],
+   avatars:['🐉','🐺','🔥','⚡','🌹'],
+   desc:'완전체의 밸런스 플레이. 포커페이스의 벽을 넘어라!'},
+  {name:'궁극체 MEGA',icon:'👑',sb:1000,bb:2000,chips:50000,opponents:3,hands:15,
+   names:['오메가몬','임페리얼드라몬','알파몬','제스몬','듀크몬'],
+   avatars:['⚔️','🐲','🌑','⚡','🛡️'],
+   desc:'궁극체 GTO 플레이. 여기서 살아남으면 디지털 챔피언!'},
 ];
 
 const HAND_NAMES = ['하이카드','원페어','투페어','트리플','스트레이트','플러시','풀하우스','포카드','스트레이트 플러시','로얄 플러시'];
@@ -784,7 +811,7 @@ function renderCommunity() {
   el.innerHTML = '';
   G.community.forEach(c => { el.innerHTML += cardHTML(c); });
   for (let i = G.community.length; i < 5; i++) {
-    el.innerHTML += `<div class="card" style="border:1px dashed #333;background:transparent"></div>`;
+    el.innerHTML += `<div class="card" style="border:1px dashed rgba(0,238,255,0.12);background:rgba(0,238,255,0.02)"></div>`;
   }
 }
 
