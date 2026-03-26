@@ -122,11 +122,28 @@ body {
 .opp .opp-cards { display: flex; gap: 2px; }
 .opp .opp-bet { font-size: 0.6em; color: var(--gold); min-height: 14px; }
 .opp .opp-action {
-  font-size: 0.6em; color: var(--cyan); position: absolute; top: -8px; right: -4px;
-  background: var(--bg); padding: 1px 5px; border-radius: 8px; white-space: nowrap;
-  animation: fadeAction 2s forwards;
+  font-size: 0.75em; font-weight: 700; color: #fff; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: var(--blue); padding: 3px 10px; border-radius: 10px; white-space: nowrap;
+  z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
-@keyframes fadeAction { 0%{opacity:1;transform:translateY(0)} 70%{opacity:1} 100%{opacity:0;transform:translateY(-8px)} }
+.opp .opp-action.act-fold { background: #555; color: #aaa; }
+.opp .opp-action.act-call { background: var(--green); color: #000; }
+.opp .opp-action.act-raise { background: var(--gold); color: #000; }
+.opp .opp-action.act-allin { background: var(--red); color: #fff; }
+.opp .opp-action.act-check { background: var(--bg3); color: var(--text); }
+
+/* 액션 로그 스트립 */
+.action-log {
+  display: flex; flex-direction: column; gap: 2px; padding: 4px 14px;
+  max-height: 60px; overflow-y: auto; flex-shrink: 0;
+}
+.action-log-item {
+  font-size: 0.75em; padding: 3px 8px; border-radius: 6px;
+  background: rgba(255,255,255,0.05);
+}
+.action-log-item .alog-name { font-weight: 700; color: var(--cyan); }
+.action-log-item .alog-act { color: var(--gold); }
+.action-log-item .alog-amt { color: var(--green); }
 
 .dealer-btn {
   background: var(--gold); color: #000; width: 18px; height: 18px; border-radius: 50%;
@@ -170,10 +187,7 @@ body {
   border: 2px solid #555;
 }
 .card-back::after { content: '🂠'; font-size: 1.5em; }
-.card.dealing { animation: dealCard 0.3s ease-out; }
-@keyframes dealCard { from { transform: translateY(-40px) scale(0.5); opacity:0; } to { transform: translateY(0) scale(1); opacity:1; } }
-.card.reveal { animation: revealCard 0.4s ease-out; }
-@keyframes revealCard { 0%{transform:rotateY(90deg)} 100%{transform:rotateY(0)} }
+/* 애니메이션 제거 - 정적 표시 */
 
 /* 미니카드 (상대용) */
 .mini-card {
@@ -262,14 +276,32 @@ body {
 .overlay-box .btn { margin-top: 16px; width: 100%; }
 .overlay-box .showdown-hands { text-align: left; margin: 12px 0; }
 .overlay-box .sd-player {
-  display: flex; align-items: center; gap: 8px; padding: 6px 0;
-  border-bottom: 1px solid var(--bg3); font-size: 0.85em;
+  display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+  border-bottom: 1px solid var(--bg3); font-size: 0.9em;
+  border-radius: 8px; margin-bottom: 4px;
 }
-.overlay-box .sd-player:last-child { border: none; }
-.overlay-box .sd-player .sd-cards { display: flex; gap: 3px; }
-.overlay-box .sd-player.winner { color: var(--gold); font-weight: 700; }
-.overlay-box .sd-player .sd-rank { margin-left: auto; font-size: 0.8em; color: var(--cyan); }
-.pot-won { color: var(--gold); font-size: 1.1em; font-weight: 700; }
+.overlay-box .sd-player:last-child { border: none; margin-bottom: 0; }
+.overlay-box .sd-player .sd-cards { display: flex; gap: 4px; }
+.overlay-box .sd-player.winner {
+  color: var(--gold); font-weight: 700;
+  background: rgba(255, 215, 0, 0.1); border: 1px solid rgba(255,215,0,0.3);
+}
+.overlay-box .sd-player .sd-name { min-width: 70px; text-align: left; }
+.overlay-box .sd-player .sd-rank {
+  margin-left: auto; font-size: 0.85em; color: var(--cyan); font-weight: 600;
+  background: rgba(0,210,211,0.1); padding: 2px 8px; border-radius: 6px;
+}
+.overlay-box .sd-board {
+  display: flex; gap: 5px; justify-content: center; margin: 12px 0;
+  padding: 10px; background: rgba(26,92,42,0.3); border-radius: 10px;
+}
+.pot-won {
+  color: var(--gold); font-size: 1.3em; font-weight: 700;
+  margin-top: 8px !important;
+}
+.sd-result-label {
+  font-size: 0.8em; color: var(--dim); margin-bottom: 8px;
+}
 
 /* 반응형 */
 @media (min-width: 600px) {
@@ -284,16 +316,7 @@ body {
   :root { --card-w: 62px; --card-h: 88px; }
 }
 
-/* 애니메이션 */
-.chip-fly {
-  animation: chipFly 0.5s ease-out;
-}
-@keyframes chipFly {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-.shake { animation: shake 0.3s ease-in-out; }
-@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+/* 애니메이션 최소화 */
 </style>
 </head>
 <body>
@@ -331,8 +354,9 @@ body {
     <span class="hand-num" id="topHand"></span>
   </div>
   <div class="opponents-area" id="opponents"></div>
+  <div class="action-log" id="actionLog"></div>
   <div class="table-area">
-    <div class="pot-display chip-fly" id="potDisplay">POT: 0</div>
+    <div class="pot-display" id="potDisplay">POT: 0</div>
     <div class="community-cards" id="communityCards"></div>
     <div class="stage-label" id="stageLabel"></div>
   </div>
@@ -712,7 +736,7 @@ function renderCommunity() {
   const el = document.getElementById('communityCards');
   el.innerHTML = '';
   G.community.forEach((c, i) => {
-    el.innerHTML += cardHTML(c, 'dealing');
+    el.innerHTML += cardHTML(c);
   });
   // 빈 슬롯
   for (let i = G.community.length; i < 5; i++) {
@@ -728,7 +752,7 @@ function renderPlayer() {
 
   const el = document.getElementById('playerCards');
   if (p.cards && p.cards.length) {
-    el.innerHTML = p.cards.map(c => cardHTML(c, 'dealing')).join('');
+    el.innerHTML = p.cards.map(c => cardHTML(c)).join('');
   } else {
     el.innerHTML = cardHTML(null) + cardHTML(null);
   }
@@ -935,6 +959,7 @@ async function playNextHand() {
   G.currentBet = 0;
   G.minRaise = lv.bb;
   G.deck = newDeck();
+  document.getElementById('actionLog').innerHTML = '';
 
   // 딜러 이동
   G.dealerIdx = nextAlive(G.dealerIdx);
@@ -1118,29 +1143,45 @@ function showAiAction(player, decision, idx) {
   const old = el.querySelector('.opp-action');
   if (old) old.remove();
 
-  const lvl = G.level;
-  let text = '';
-  const tells = {
-    0: {fold:'😫 폴드',check:'체크~',call:'콜!',raise:'레이즈!',allin:'몰빵!!'},
-    1: {fold:'폴드',check:'체크',call:'콜',raise:'레이즈',allin:'올인!'},
-    2: {fold:'...폴드',check:'...',call:'콜',raise:'레이즈',allin:'올인'},
-    3: {fold:'',check:'',call:'',raise:'',allin:'ALL-IN'},
-    4: {fold:'',check:'',call:'',raise:'',allin:''},
-  };
-  text = tells[lvl]?.[decision.action] || decision.action;
+  const act = decision.action;
+  const actCls = 'act-' + (act === 'raise' ? 'raise' : act === 'allin' ? 'allin' : act === 'call' ? 'call' : act === 'fold' ? 'fold' : 'check');
 
-  if (decision.action === 'raise' && decision.amount) {
-    text += text ? ' ' + formatChips(decision.amount) : formatChips(decision.amount);
+  const actionLabels = {fold:'FOLD',check:'CHECK',call:'CALL',raise:'RAISE',allin:'ALL-IN'};
+  let text = actionLabels[act] || act.toUpperCase();
+  let amtText = '';
+
+  if (act === 'raise' && decision.amount) {
+    amtText = formatChips(decision.amount);
+    text += ' ' + amtText;
   }
-  if (decision.action === 'allin') {
-    text = text || 'ALL-IN';
+  if (act === 'allin') {
+    amtText = formatChips(player.chips);
   }
 
-  if (text) {
-    const tag = document.createElement('div');
-    tag.className = 'opp-action';
-    tag.textContent = text;
-    el.appendChild(tag);
+  const tag = document.createElement('div');
+  tag.className = 'opp-action ' + actCls;
+  tag.textContent = text;
+  el.appendChild(tag);
+
+  // 액션 로그에 추가
+  addActionLog(player.name, act, amtText);
+}
+
+function addActionLog(name, action, amount) {
+  const log = document.getElementById('actionLog');
+  const actLabels = {fold:'폴드',check:'체크',call:'콜',raise:'레이즈',allin:'올인'};
+  const label = actLabels[action] || action;
+  const amtStr = amount ? ` ${amount}` : '';
+
+  const item = document.createElement('div');
+  item.className = 'action-log-item';
+  item.innerHTML = `<span class="alog-name">${name}</span> <span class="alog-act">${label}</span><span class="alog-amt">${amtStr}</span>`;
+  log.appendChild(item);
+  log.scrollTop = log.scrollHeight;
+
+  // 최대 6개만 유지
+  while (log.children.length > 6) {
+    log.removeChild(log.firstChild);
   }
 }
 
@@ -1162,6 +1203,9 @@ function doAction(type, amount) {
   const toCall = Math.max(0, G.currentBet - p.bet);
 
   if (type === 'call' && p.chips <= toCall) type = 'allin';
+
+  const amtStr = type === 'raise' ? formatChips(amount) : type === 'allin' ? formatChips(p.chips) : '';
+  addActionLog(p.name, type, amtStr);
 
   humanResolve({action: type, amount});
   humanResolve = null;
@@ -1217,22 +1261,34 @@ async function finishHand() {
 
   renderAll();
 
+  const boardHTML = G.community.map(c => {
+    const d = RANK_DISPLAY[c.rank] || c.rank;
+    const isRed = c.suit === '♥' || c.suit === '♦';
+    return `<div class="mini-card card-front ${isRed?'red':''}"><span class="card-rank">${d}</span><span class="card-suit">${c.suit}</span></div>`;
+  }).join('');
+
   const sdHTML = results.map(r => {
     const isW = winners.includes(r);
+    const you = r.player.isHuman ? ' (YOU)' : '';
     return `<div class="sd-player ${isW?'winner':''}">
-      <span>${isW?'🏆':''} ${r.player.name}</span>
+      <span class="sd-name">${isW?'🏆 ':''}${r.player.name}${you}</span>
       <span class="sd-cards">${miniCardHTML(r.player.cards[0])}${miniCardHTML(r.player.cards[1])}</span>
       <span class="sd-rank">${r.name}</span>
     </div>`;
   }).join('');
 
   const winnerNames = winners.map(w => w.player.name).join(', ');
+  const isHumanWin = winners.some(w => w.player.isHuman);
+  const resultEmoji = isHumanWin ? '🎉' : '😤';
+  const resultTitle = isHumanWin ? 'YOU WIN!' : `${winnerNames} 승리`;
+
   showOverlay(`
-    <div class="big-emoji">🃏</div>
-    <h2>SHOWDOWN</h2>
-    <p>보드: ${G.community.map(c=>{const d=RANK_DISPLAY[c.rank]||c.rank;return (c.suit==='♥'||c.suit==='♦'?'<span style="color:#d63031">':'<span>')+d+c.suit+'</span>';}).join(' ')}</p>
+    <div class="big-emoji">${resultEmoji}</div>
+    <h2>${resultTitle}</h2>
+    <p class="sd-result-label">BOARD</p>
+    <div class="sd-board">${boardHTML}</div>
     <div class="showdown-hands">${sdHTML}</div>
-    <p class="pot-won">${winnerNames} +${formatChips(G.pot)}</p>
+    <p class="pot-won">POT +${formatChips(G.pot)}</p>
     <button class="btn btn-gold" onclick="hideOverlay();playNextHand()">다음 핸드</button>
   `);
   G.pot = 0;
