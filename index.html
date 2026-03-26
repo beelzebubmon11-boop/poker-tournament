@@ -111,31 +111,39 @@ body {
   flex-wrap: wrap; flex-shrink: 0;
 }
 .opp {
-  display: flex; flex-direction: column; align-items: center; gap: 3px;
-  background: var(--bg2); border-radius: 10px; padding: 6px 8px; min-width: 70px;
-  position: relative; transition: opacity 0.3s;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  background: var(--bg2); border-radius: 10px; padding: 8px 10px 6px; min-width: 76px;
+  position: relative; border: 2px solid transparent;
 }
-.opp.folded { opacity: 0.35; }
+.opp.folded { opacity: 0.3; }
+.opp.acting { border-color: var(--cyan); }
 .opp.eliminated { display: none; }
-.opp .opp-name { font-size: 0.7em; font-weight: 600; max-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.opp .opp-avatar { font-size: 1.6em; line-height: 1; }
+.opp .opp-name { font-size: 0.7em; font-weight: 600; max-width: 76px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .opp .opp-chips { font-size: 0.65em; color: var(--green); }
 .opp .opp-cards { display: flex; gap: 2px; }
 .opp .opp-bet { font-size: 0.6em; color: var(--gold); min-height: 14px; }
-.opp .opp-action {
-  font-size: 0.75em; font-weight: 700; color: #fff; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-  background: var(--blue); padding: 3px 10px; border-radius: 10px; white-space: nowrap;
-  z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+.opp .opp-status {
+  font-size: 0.7em; font-weight: 700; padding: 2px 8px; border-radius: 6px;
+  min-height: 20px; text-align: center; white-space: nowrap;
 }
-.opp .opp-action.act-fold { background: #555; color: #aaa; }
-.opp .opp-action.act-call { background: var(--green); color: #000; }
-.opp .opp-action.act-raise { background: var(--gold); color: #000; }
-.opp .opp-action.act-allin { background: var(--red); color: #fff; }
-.opp .opp-action.act-check { background: var(--bg3); color: var(--text); }
+.opp .opp-status.st-fold { background: #333; color: #777; }
+.opp .opp-status.st-check { background: rgba(255,255,255,0.1); color: var(--text); }
+.opp .opp-status.st-call { background: rgba(46,213,115,0.25); color: var(--green); }
+.opp .opp-status.st-raise { background: rgba(255,215,0,0.25); color: var(--gold); }
+.opp .opp-status.st-allin { background: rgba(255,71,87,0.4); color: #fff; }
+.opp .opp-status.st-none { background: transparent; color: transparent; }
+
+.dealer-btn {
+  background: var(--gold); color: #000; width: 18px; height: 18px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 0.55em; font-weight: 900;
+  position: absolute; top: -4px; right: -4px;
+}
 
 /* 액션 로그 스트립 */
 .action-log {
   display: flex; flex-direction: column; gap: 2px; padding: 4px 14px;
-  max-height: 60px; overflow-y: auto; flex-shrink: 0;
+  max-height: 54px; overflow-y: auto; flex-shrink: 0;
 }
 .action-log-item {
   font-size: 0.75em; padding: 3px 8px; border-radius: 6px;
@@ -144,12 +152,6 @@ body {
 .action-log-item .alog-name { font-weight: 700; color: var(--cyan); }
 .action-log-item .alog-act { color: var(--gold); }
 .action-log-item .alog-amt { color: var(--green); }
-
-.dealer-btn {
-  background: var(--gold); color: #000; width: 18px; height: 18px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center; font-size: 0.55em; font-weight: 900;
-  position: absolute; top: -6px; left: -4px;
-}
 
 /* 테이블 (커뮤니티) */
 .table-area {
@@ -174,7 +176,6 @@ body {
   display: flex; align-items: center; justify-content: center;
   font-size: 0.85em; font-weight: 700; position: relative;
   box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-  transition: transform 0.3s;
 }
 .card-front {
   background: #fff; color: #222; flex-direction: column; gap: 1px;
@@ -412,18 +413,23 @@ const RANK_DISPLAY = {T:'10',J:'J',Q:'Q',K:'K',A:'A'};
 const LEVELS = [
   {name:'동네 초보',icon:'🐟',sb:50,bb:100,chips:10000,opponents:5,hands:10,
    names:['뽀식이','럭키짱','초심자','해피','콜링머신'],
+   avatars:['🐥','🐹','🐰','🐸','🐷'],
    desc:'초보들은 감으로 플레이합니다. 편하게 즐기세요!'},
   {name:'동호회 중수',icon:'🎯',sb:100,bb:200,chips:15000,opponents:4,hands:12,
    names:['타이거','폭스','블레이드','스톰','레이저'],
+   avatars:['🐯','🦊','🐺','🦅','🐍'],
    desc:'핸드 선별을 시작합니다. 무분별한 콜은 줄여야 해요.'},
   {name:'세미프로',icon:'🔥',sb:200,bb:400,chips:20000,opponents:4,hands:12,
    names:['아이스맨','스나이퍼','쉐도우','네뷸라','팬텀'],
+   avatars:['🐻‍❄️','🦁','🐆','🦇','🦉'],
    desc:'C-벳과 세미블러프를 구사합니다. 팟 오즈를 계산하세요!'},
   {name:'프로',icon:'🦈',sb:500,bb:1000,chips:30000,opponents:3,hands:14,
    names:['다니엘N','필아이비','가스한센','패트릭A','톰드완'],
+   avatars:['🦈','🐊','🦂','🐉','🦍'],
    desc:'밸런스 플레이, 트래핑, 포커페이스. 진짜 승부가 시작됩니다.'},
   {name:'월드클래스',icon:'👑',sb:1000,bb:2000,chips:50000,opponents:3,hands:15,
    names:['GTO봇','솔버AI','알파포커','딥스택','넛크래커'],
+   avatars:['🤖','👾','🧠','💀','👽'],
    desc:'GTO 기반 최적 플레이. 여기서 살아남으면 당신이 챔피언!'},
 ];
 
@@ -711,53 +717,96 @@ function formatChips(n) {
   return n.toLocaleString();
 }
 
-function renderOpponents() {
+function buildOpponents() {
   const el = document.getElementById('opponents');
   el.innerHTML = '';
   G.players.forEach((p, i) => {
-    if (p.isHuman || p.chips <= 0 && p.folded) return;
-    if (p.chips <= 0 && !p.allIn) return;
-    const isDealer = i === G.dealerIdx;
-    const showCards = p.showCards && p.cards;
+    if (p.isHuman) return;
     el.innerHTML += `
-      <div class="opp ${p.folded?'folded':''}" id="opp-${i}">
-        ${isDealer ? '<div class="dealer-btn">D</div>' : ''}
+      <div class="opp" id="opp-${i}">
+        <div class="dealer-btn" id="dealer-${i}" style="display:none">D</div>
+        <div class="opp-avatar">${p.avatar || '?'}</div>
         <div class="opp-name">${p.name}</div>
-        <div class="opp-cards">
-          ${showCards ? miniCardHTML(p.cards[0]) + miniCardHTML(p.cards[1]) : miniCardHTML(null,true) + miniCardHTML(null,true)}
-        </div>
-        <div class="opp-chips">${p.folded ? 'FOLD' : formatChips(p.chips)}</div>
-        <div class="opp-bet">${p.bet > 0 ? '🪙'+formatChips(p.bet) : ''}</div>
+        <div class="opp-cards" id="oppcards-${i}"></div>
+        <div class="opp-chips" id="oppchips-${i}"></div>
+        <div class="opp-status st-none" id="oppstatus-${i}"></div>
+        <div class="opp-bet" id="oppbet-${i}"></div>
       </div>`;
   });
 }
 
+function renderOpponents() {
+  G.players.forEach((p, i) => {
+    if (p.isHuman) return;
+    const el = document.getElementById('opp-' + i);
+    if (!el) return;
+
+    // 표시/숨김
+    if (p.chips <= 0 && !p.allIn) { el.style.display = 'none'; return; }
+    el.style.display = '';
+
+    // folded
+    el.classList.toggle('folded', p.folded);
+
+    // 딜러
+    const db = document.getElementById('dealer-' + i);
+    if (db) db.style.display = (i === G.dealerIdx) ? '' : 'none';
+
+    // 카드
+    const cc = document.getElementById('oppcards-' + i);
+    if (cc) {
+      if (p.showCards && p.cards && p.cards.length) {
+        cc.innerHTML = miniCardHTML(p.cards[0]) + miniCardHTML(p.cards[1]);
+      } else if (!p.folded) {
+        cc.innerHTML = miniCardHTML(null,true) + miniCardHTML(null,true);
+      } else {
+        cc.innerHTML = '';
+      }
+    }
+
+    // 칩
+    const ch = document.getElementById('oppchips-' + i);
+    if (ch) ch.textContent = p.folded ? '' : formatChips(p.chips);
+
+    // 벳
+    const bt = document.getElementById('oppbet-' + i);
+    if (bt) bt.textContent = p.bet > 0 ? '🪙' + formatChips(p.bet) : '';
+
+    // 액션 상태 (유지 - showAiAction에서 설정)
+  });
+}
+
+let lastCommunityLen = -1;
 function renderCommunity() {
+  if (G.community.length === lastCommunityLen) return;
+  lastCommunityLen = G.community.length;
   const el = document.getElementById('communityCards');
   el.innerHTML = '';
-  G.community.forEach((c, i) => {
-    el.innerHTML += cardHTML(c);
-  });
-  // 빈 슬롯
+  G.community.forEach(c => { el.innerHTML += cardHTML(c); });
   for (let i = G.community.length; i < 5; i++) {
     el.innerHTML += `<div class="card" style="border:1px dashed #333;background:transparent"></div>`;
   }
 }
 
+let lastPlayerCards = '';
 function renderPlayer() {
   const p = humanPlayer();
   if (!p) return;
   document.getElementById('playerName').textContent = p.name;
   document.getElementById('playerChips').textContent = '💰 ' + formatChips(p.chips);
 
-  const el = document.getElementById('playerCards');
-  if (p.cards && p.cards.length) {
-    el.innerHTML = p.cards.map(c => cardHTML(c)).join('');
-  } else {
-    el.innerHTML = cardHTML(null) + cardHTML(null);
+  // 카드는 바뀔 때만 업데이트
+  const cardKey = p.cards ? p.cards.map(c=>c.rank+c.suit).join('') : '';
+  if (cardKey !== lastPlayerCards) {
+    lastPlayerCards = cardKey;
+    const el = document.getElementById('playerCards');
+    if (p.cards && p.cards.length) {
+      el.innerHTML = p.cards.map(c => cardHTML(c)).join('');
+    } else {
+      el.innerHTML = cardHTML(null) + cardHTML(null);
+    }
   }
 
-  // 핸드 랭크
   const hr = document.getElementById('playerHandRank');
   if (G.community.length > 0 && p.cards && !p.folded) {
     const score = evalHand([...p.cards, ...G.community]);
@@ -898,10 +947,13 @@ function showLevelIntro() {
   document.getElementById('lvBlinds').textContent = `블라인드: ${formatChips(lv.sb)}/${formatChips(lv.bb)} | 시작 칩: ${formatChips(lv.chips)}`;
 
   const oppEl = document.getElementById('lvOpponents');
-  const names = shuffleArray([...lv.names]).slice(0, lv.opponents);
-  oppEl.innerHTML = names.map(n => `<span class="opponent-chip">${n}</span>`).join('');
+  const indices = shuffleArray([...Array(lv.names.length).keys()]).slice(0, lv.opponents);
+  const names = indices.map(i => lv.names[i]);
+  const avatars = indices.map(i => lv.avatars[i]);
+  oppEl.innerHTML = names.map((n,i) => `<span class="opponent-chip">${avatars[i]} ${n}</span>`).join('');
 
   G.levelOpponents = names;
+  G.levelAvatars = avatars;
   showScreen('levelIntro');
 }
 
@@ -914,16 +966,18 @@ function startLevel() {
     name: G.playerName, chips: lv.chips, cards: [], isHuman: true,
     folded: false, allIn: false, bet: 0, totalBet: 0, showCards: false
   }];
-  G.levelOpponents.forEach(name => {
+  G.levelOpponents.forEach((name, i) => {
     G.players.push({
       name, chips: lv.chips, cards: [], isHuman: false,
-      folded: false, allIn: false, bet: 0, totalBet: 0, showCards: false
+      folded: false, allIn: false, bet: 0, totalBet: 0, showCards: false,
+      avatar: G.levelAvatars[i], lastAction: ''
     });
   });
   shuffle(G.players);
   G.dealerIdx = Math.floor(Math.random() * G.players.length);
 
   showScreen('gameScreen');
+  buildOpponents();
   playNextHand();
 }
 
@@ -960,6 +1014,15 @@ async function playNextHand() {
   G.minRaise = lv.bb;
   G.deck = newDeck();
   document.getElementById('actionLog').innerHTML = '';
+  lastCommunityLen = -1;
+  lastPlayerCards = '';
+
+  // 상대 액션 상태 초기화
+  G.players.forEach((p, i) => {
+    p.lastAction = '';
+    const st = document.getElementById('oppstatus-' + i);
+    if (st) { st.textContent = ''; st.className = 'opp-status st-none'; }
+  });
 
   // 딜러 이동
   G.dealerIdx = nextAlive(G.dealerIdx);
@@ -1138,13 +1201,9 @@ async function processAction(player, decision, idx) {
 }
 
 function showAiAction(player, decision, idx) {
-  const el = document.getElementById('opp-' + idx);
-  if (!el) return;
-  const old = el.querySelector('.opp-action');
-  if (old) old.remove();
-
   const act = decision.action;
-  const actCls = 'act-' + (act === 'raise' ? 'raise' : act === 'allin' ? 'allin' : act === 'call' ? 'call' : act === 'fold' ? 'fold' : 'check');
+  const stEl = document.getElementById('oppstatus-' + idx);
+  if (!stEl) return;
 
   const actionLabels = {fold:'FOLD',check:'CHECK',call:'CALL',raise:'RAISE',allin:'ALL-IN'};
   let text = actionLabels[act] || act.toUpperCase();
@@ -1155,13 +1214,14 @@ function showAiAction(player, decision, idx) {
     text += ' ' + amtText;
   }
   if (act === 'allin') {
-    amtText = formatChips(player.chips);
+    amtText = formatChips(player.chips + (player.bet || 0));
+    text = 'ALL-IN';
   }
 
-  const tag = document.createElement('div');
-  tag.className = 'opp-action ' + actCls;
-  tag.textContent = text;
-  el.appendChild(tag);
+  const stCls = 'st-' + (act === 'raise' ? 'raise' : act === 'allin' ? 'allin' : act === 'call' ? 'call' : act === 'fold' ? 'fold' : 'check');
+  stEl.className = 'opp-status ' + stCls;
+  stEl.textContent = text;
+  player.lastAction = act;
 
   // 액션 로그에 추가
   addActionLog(player.name, act, amtText);
