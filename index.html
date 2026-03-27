@@ -877,15 +877,16 @@ function updateActions() {
   } else {
     document.getElementById('btnFold').style.display = '';
     document.getElementById('btnCheck').style.display = 'none';
-    document.getElementById('btnCall').style.display = '';
-    document.getElementById('callAmount').textContent = formatChips(Math.min(toCall, p.chips));
+    const btnCall = document.getElementById('btnCall');
+    btnCall.style.display = '';
+    btnCall.innerHTML = '콜<span class="btn-label" id="callAmount">' + formatChips(Math.min(toCall, p.chips)) + '</span>';
   }
 
   if (p.chips <= toCall) {
     document.getElementById('btnRaise').style.display = 'none';
     if (toCall > 0) {
-      document.getElementById('btnCall').textContent = '올인';
-      document.getElementById('btnCall').querySelector('.btn-label').textContent = formatChips(p.chips);
+      const btnCall = document.getElementById('btnCall');
+      btnCall.innerHTML = '올인<span class="btn-label" id="callAmount">' + formatChips(p.chips) + '</span>';
     }
   } else {
     document.getElementById('btnRaise').style.display = '';
